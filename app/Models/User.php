@@ -13,7 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 #[Table(incrementing: true, timestamps: true)]
-#[Fillable(['name', 'email', 'password', 'nik', 'birthday', 'nomor_kk'])]
+#[Fillable(['name', 'email', 'password', 'nik', 'birthday', 'nomor_kk', 'role'])]
 #[Hidden(['password'])]
 class User extends Authenticatable
 {
@@ -25,5 +25,9 @@ class User extends Authenticatable
 
     public function Report() {
         return $this->hasMany(Report::class, 'user_id', 'id');
+    }
+
+    public function VerificationCode() {
+        return $this->hasOne(CodeVerification::class, 'user_id', 'id');
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('birthday');
             $table->string('nomor_kk');
             $table->enum('role', ['warga', 'petugas']);
+            $table->timestamp('email_verified_at')->nullable()->default(null);
             $table->timestamps();
         });
     }
