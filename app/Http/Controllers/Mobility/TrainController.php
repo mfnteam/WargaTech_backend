@@ -10,6 +10,7 @@ use App\Models\TrainRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TrainController extends Controller
 {
@@ -27,8 +28,15 @@ class TrainController extends Controller
             'departure' => 'required|date_format:H:i',
             'line' => 'required|in:redline,greenline,blueline,purpleline,brownline',
             'stasiun_awal' => 'required',
-            'stasiun_akhir' => 'required'
+            'stasiun_akhir' => 'required',
+            'via' => [
+                Rule::requiredIf(($request->stasiun_awal === 'cikarang' && $request->stasiun_akhir === "kampungbandan") || ($request->stasiun_awal === 'bekasi' && $request->stasiun_akhir === "kampungbandan") || ($request->stasiun_awal === 'kampungbandan' && $request->stasiun_akhir === "cikarang") || ($request->stasiun_awal === 'kampungbandan' && $request->stasiun_akhir === "bekasi")),
+                Rule::in(['mri', 'pse']),
+                    ],
+        ], [
+            'via.in' => 'Tolong pilih antara pse (Pasar Senen) atau mri (Manggarai)'
         ]);
+
 
         if($validated->fails()) {
             return response()->json([
@@ -116,7 +124,114 @@ class TrainController extends Controller
 
         //blue line
         if($request['line'] === "blueline") {
+            $bluelinetrack = strtolower($request['stasiun_awal']) . strtolower($request['stasiun_akhir']);
 
+            //via pasar senen
+            if(($request['via'] === "pse")) {
+
+                if($bluelinetrack === "cikarangkampungbandan") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via PSE"
+                ]);
+
+                $cikarangkpbandan = $track[2];
+                track_maker($cikarangkpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+                
+                if($bluelinetrack === "kampungbandancikarang") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via PSE"
+                ]);
+
+                $cikarangkpbandan = $track[2];
+                reverse_track_maker($cikarangkpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+
+
+                if($bluelinetrack === "bekasikampungbandan") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via PSE"
+                ]);
+
+                $cikarangkpbandan = $track[3];
+                track_maker($cikarangkpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+
+                if($bluelinetrack === "kampungbandanbekasi") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via PSE"
+                ]);
+
+                $cikarangkpbandan = $track[3];
+                reverse_track_maker($cikarangkpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+            }
+
+
+            //manggarai
+            if(($request['via'] === "pse")) {
+
+                if($bluelinetrack === "cikarangkampungbandan") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via MRI"
+                ]);
+
+                $cikarangkpbandan = $track[4];
+                track_maker($cikarangkpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+                
+
+                if($bluelinetrack === "kampungbandancikarang") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via MRI"
+                ]);
+
+                $cikarangkpbandan = $track[4];
+                reverse_track_maker($cikarangkpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+            }
         }
 
 
@@ -174,6 +289,7 @@ class TrainController extends Controller
         $route = TrainRoute::where('train_id', $id)->first();
         $order = RouteOrder::where('route_id', $route->id)
                             ->join('train_stations', 'train_stations.id', '=', 'route_orders.station_id')
+                            ->orderBy('order')
                             ->get();
 
         $departure = Carbon::parse($train->departure);
