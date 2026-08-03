@@ -30,4 +30,8 @@ class User extends Authenticatable
     public function VerificationCode() {
         return $this->hasOne(CodeVerification::class, 'user_id', 'id');
     }
+
+    public function ProfilePicture() {
+        return $this->hasOne(ProfilePictures::class, 'user_id', 'id');
+    }
 }

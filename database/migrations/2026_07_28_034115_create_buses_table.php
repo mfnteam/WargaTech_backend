@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('buses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('route_id');
-            $table->foreign('route_id')->references('id')->on('bus_routes');
+            $table->foreign('route_id')->references('id')->on('bus_routes')->cascadeOnDelete();
             $table->time('departure');
             $table->timestamps();
         });

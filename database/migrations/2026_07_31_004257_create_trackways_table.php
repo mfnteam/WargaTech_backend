@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('train_routes', function (Blueprint $table) {
+        Schema::create('trackways', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('train_id');
-            $table->foreign('train_id')->references('id')->on('trains')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('name');
-            $table->string('direction');
+            $table->string('track_name');
+            $table->string('station_passed');
+            $table->string('travel_time');
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('train_routes');
+        Schema::dropIfExists('trackways');
     }
 };
