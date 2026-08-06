@@ -197,7 +197,7 @@ class TrainController extends Controller
 
 
             //manggarai
-            if(($request['via'] === "pse")) {
+            if(($request['via'] === "mri")) {
 
                 if($bluelinetrack === "cikarangkampungbandan") {
                 $route = TrainRoute::create([
@@ -231,26 +231,221 @@ class TrainController extends Controller
                     'message' => 'Kereta berhasil dibuat'
                 ], 201);
                 }
+
+
+                if($bluelinetrack === "bekasikampungbandan") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via MRI"
+                ]);
+
+                $bekasikpbandan = $track[5];
+                track_maker($bekasikpbandan, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+                
+
+                if($bluelinetrack === "kampungbandanbekasi") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir']) . " via MRI"
+                ]);
+
+                $kpbandanbekasi = $track[5];
+                reverse_track_maker($kpbandanbekasi, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+                }
+            }
+
+            //ckrg
+            if($bluelinetrack === "cikarangangke") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $cikarangangke = $track[6];
+                track_maker($cikarangangke, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
+
+            if($bluelinetrack === "angkecikarang") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $cikarangangke = $track[6];
+                reverse_track_maker($cikarangangke, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
+
+            //bks
+            if($bluelinetrack === "bekasiangke") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $cikarangangke = $track[7];
+                track_maker($cikarangangke, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
+
+            if($bluelinetrack === "angkebekasi") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $cikarangangke = $track[7];
+                reverse_track_maker($cikarangangke, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
             }
         }
 
 
         //greenline
         if($request['line'] === "greenline") {
-            
+            $greenlinetrack = strtolower($request['stasiun_awal']) . strtolower($request['stasiun_akhir']);
+            if($greenlinetrack === "tanahabangtangerang") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $tnabangrangkas = $track[8];
+                track_maker($tnabangrangkas, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
+
+            if($greenlinetrack === "tangerangtanahabang") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $tnabangrangkas = $track[8];
+                reverse_track_maker($tnabangrangkas, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
         }
 
 
         //purpleline
         if($request['line'] === "purpleline") {
-            
+            $purplelinetrack = strtolower($request['stasiun_awal']) . strtolower($request['stasiun_akhir']);
+            if($purplelinetrack === "jakartakotatanjungpriok") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $jktkotatjpriok = $track[10];
+                track_maker($jktkotatjpriok, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
+
+            if($purplelinetrack === "tanjungpriokjakartakota") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $jktkotatjpriok = $track[10];
+                reverse_track_maker($jktkotatjpriok, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
         }
 
 
         //brownline
         if($request['line'] === "brownline") {
-            
+            $brownlinetrack = strtolower($request['stasiun_awal']) . strtolower($request['stasiun_akhir']);
+            if($brownlinetrack === "duritangerang") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $duritangerang = $track[9];
+                track_maker($duritangerang, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
+
+            if($brownlinetrack === "tangerangduri") {
+                $route = TrainRoute::create([
+                    'train_id' => $train->id,
+                    'name' => $request['line'],
+                    'direction' => strtolower($request['stasiun_awal']) . "-" . strtolower($request['stasiun_akhir'])
+                ]);
+
+                $duritangerang = $track[9];
+                reverse_track_maker($duritangerang, $route);
+
+                return response()->json([
+                    'status' => 'Success',
+                    'message' => 'Kereta berhasil dibuat'
+                ], 201);
+            }
         }
+
+        Train::destroy($train->id);
 
         return response()->json([
             'status' => 'Error',

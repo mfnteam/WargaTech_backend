@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Mobility\BusController;
+use App\Http\Controllers\Mobility\LrtController;
+use App\Http\Controllers\Mobility\MrtController;
 use App\Http\Controllers\Mobility\TrainController;
 use App\Models\TrainStation;
 use Illuminate\Http\Request;
@@ -35,5 +38,32 @@ Route::group([
         Route::post('/create-train', [TrainController::class, 'createTrain']);
         Route::get('/list-train', [TrainController::class, 'listTrain']);
         Route::get('/detail-train/{id}', [TrainController::class, 'detailTrain']);
+    });
+
+    //Bus
+    Route::group([
+        'prefix' => 'bus'
+    ], function() {
+        Route::post('/create-bus', [BusController::class, 'createBus']);
+        Route::get('/list-bus', [BusController::class, 'showBus']);
+        Route::get('/list-corridor', [BusController::class, 'showRoute']);
+    });
+
+    //MRT
+    Route::group([
+        'prefix' => 'mrt'
+    ], function() {
+        Route::post('/create-mrt', [MrtController::class, 'createMrt']);
+        Route::get('/list-mrt', [MrtController::class, 'showMrt']);
+        Route::get('/list-station', [MrtController::class, 'showStation']);
+    });
+
+    //LRT
+    Route::group([
+        'prefix' => 'lrt'
+    ], function() {
+        Route::post('/create-lrt', [LrtController::class, 'createLrt']);
+        Route::get('/list-lrt', [LrtController::class, 'showLrt']);
+        Route::get('/list-station', [LrtController::class, 'showStation']);
     });
 });

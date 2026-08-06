@@ -47,13 +47,15 @@ class AuthController extends Controller
 
         $otp = random_int(100000, 999999);
 
-        CodeVerification::create([
+        dispatch(function() use($otp, $user) {
+            CodeVerification::create([
             'user_id' => $user->id,
             'code' => $otp,
             'expired_at'=> now()->addMinutes(5)
         ]);
 
         Mail::to($user['email'])->send(new VerificationCodeMail($otp));
+        })->afterResponse(true);
 
         return response()->json([
             'status' => 'Success',

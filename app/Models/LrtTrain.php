@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 #[Table(incrementing: true, timestamps: true)]
-#[Fillable(['departure', 'code'])]
+#[Fillable(['departure', 'code', 'destination', 'type'])]
 class LrtTrain extends Model
 {
     public function LrtRoute() {

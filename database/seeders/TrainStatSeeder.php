@@ -178,7 +178,112 @@ class TrainStatSeeder extends Seeder
             ],
         ];
 
-        foreach($blueline as $st) {
+        $greenline = [
+            [
+                'name' => 'Palmerah'
+            ],
+            [
+                'name' => 'Kebayoran'
+            ],
+            [
+                'name' => 'Pondok Ranji'
+            ],
+            [
+                'name' => 'Jurang Mangu'
+            ],
+            [
+                'name' => 'Sudimara'
+            ],
+            [
+                'name' => 'Rawa Buntu'
+            ],
+            [
+                'name' => 'Serpong'
+            ],
+            [
+                'name' => 'Cisauk'
+            ],
+            [
+                'name' => 'Cicayur'
+            ],
+            [
+                'name' => 'Jatake'
+            ],
+            [
+                'name' => 'Parung Panjang'
+            ],
+            [
+                'name' => 'Cilejit'
+            ],
+            [
+                'name' => 'Daru'
+            ],
+            [
+                'name' => 'Tenjo'
+            ],
+            [
+                'name' => 'Tigaraksa'
+            ],
+            [
+                'name' => 'Cikoya'
+            ],
+            [
+                'name' => 'Maja'
+            ],
+            [
+                'name' => 'Citeras'
+            ],
+            [
+                'name' => 'Rangkasbitung'
+            ],
+        ];
+
+        $brownline = [
+            [
+                'name' => 'Grogol'
+            ],
+            [
+                'name' => 'Pesing'
+            ],
+            [
+                'name' => 'Taman Kota'
+            ],
+            [
+                'name' => 'Bojong Indah'
+            ],
+            [
+                'name' => 'Rawa Buaya'
+            ],
+            [
+                'name' => 'Kalideres'
+            ],
+            [
+                'name' => 'Poris'
+            ],
+            [
+                'name' => 'Batu Ceper'
+            ],
+            [
+                'name' => 'Tanah Tinggi'
+            ],
+            [
+                'name' => 'Tangerang'
+            ],
+        ];
+
+        $purpleline = [
+            [
+                'name' => 'Ancol'
+            ],
+            [
+                'name' => 'Jakarta International Stadium'
+            ],
+            [
+                'name' => 'Tanjung Priok'
+            ],
+        ];
+
+        foreach($purpleline as $st) {
             TrainStation::create([
                 'name' => $st['name']
             ]);
