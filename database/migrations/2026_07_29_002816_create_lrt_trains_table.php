@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->time('departure');
+            $table->string('destination');
+            $table->enum('type', ['jakarta', 'jabodebek']);
             $table->timestamps();
         });
     }

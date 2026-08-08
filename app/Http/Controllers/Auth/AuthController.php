@@ -20,11 +20,14 @@ class AuthController extends Controller
             'name' => 'required|regex:/^[A-Za-z ]+$/|min:3',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'gender' => 'required|in:male,female',
+            'phone' => 'required|int|min:12|max:16',
             'birthday' => 'required|date_format:Y-m-d',
-            'nik' => 'required|int|unique:users,nik',
+            'nik' => 'required|int|unique:users,nik|min:16|max:16',
             'nomor_kk' => 'required|int'
         ], [
-            'name.regex' => 'Invalid character input, please use alphabet only'
+            'name.regex' => 'Invalid character input, please use alphabet only',
+            'gender.in' => 'Mohon pilih jenis kelamin yang benar'
         ]);
 
         if($validated->fails()) {
@@ -40,6 +43,7 @@ class AuthController extends Controller
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
             'birthday' => $request['birthday'],
+            'phone' => $request['phone'],
             'nik' => $request['nik'],
             'nomor_kk' => $request['nomor_kk'],
             'role' => 'warga',
@@ -166,5 +170,34 @@ class AuthController extends Controller
             'status' => 'Success',
             'message' => 'Logout berhasil'
         ]);
+    }
+
+
+    public function resend(Request $request) {
+        $user = $request->user();
+        $isVerified = $user->first()->email_verified_at;
+        if(is_null($isVerified)) {
+            $otp = CodeVerification::where('user_id', $user->first()->id)->first();
+            $otp->delete();
+
+            $newotp = random_int(100000, 999999);
+
+            CodeVerification::create([
+                'user_id' => $user->first()->id,
+                'code' => $newotp,
+                'expired_at'=> now()->addMinutes(5)
+            ]);
+
+            Mail::to($user->first()->email)->send(new VerificationCodeMail($newotp));
+
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Kode verifikasi sudah dikirim'
+            ]);
+        }
+        return response()->json([
+            'status' => 'Error',
+            'message' => 'Email sudah diverifikasi'
+        ], 401);
     }
 }

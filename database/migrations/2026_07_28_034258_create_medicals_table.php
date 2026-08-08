@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('service_id')->references('id')->on('services')->cascadeOnDelete();
             $table->date('date');
             $table->time('book_time');
+            $table->enum('status', ['pending', 'rejected', 'accepted']);
             $table->timestamps();
         });
     }

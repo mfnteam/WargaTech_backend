@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['user_id', 'service_id', 'date', 'book_time'])]
+#[Fillable(['user_id', 'service_id', 'date', 'book_time', 'status'])]
 #[Table(incrementing: true, timestamps: true)]
 class Medical extends Model
 {
@@ -15,6 +15,6 @@ class Medical extends Model
     }
 
     public function Service() {
-        return $this->belongsTo(Service::class, 'servce_id');
+        return $this->belongsTo(Service::class, 'service_id');
     }
 }

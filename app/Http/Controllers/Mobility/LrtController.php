@@ -11,6 +11,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
+use function Illuminate\Support\now;
+
 class LrtController extends Controller
 {
     public function createLrt(Request $request) {
@@ -185,9 +187,11 @@ class LrtController extends Controller
 
     public function showLrt(Request $request) {
 
-    $type = $request->query('type');
+        $type = $request->query('type');
 
-        $train = LrtTrain::with('LrtRoute')->where('type', $type)->orderBy('departure')->get();
+        $train = LrtTrain::with('LrtRoute')->where('type', $type)
+                            ->where('departure', '>=', date_format(now(), 'H:i'))
+                            ->orderBy('departure')->get();
 
         return response()->json([
             'status' => 'Success',
@@ -202,5 +206,42 @@ class LrtController extends Controller
                 ];
             })
         ]);
+    }
+
+
+    public function detailLrt($id) {
+        $train = LrtTrain::where('id', $id)->get();
+
+        if(!$train) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Kereta tidak ditemukan'
+            ], 404);
+        }
+
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Berhasil mendapatkan kereta',
+            'train' => $train->map(function($lrt) {
+                $dept = Carbon::parse($lrt->departure);
+                return [
+                'id' => $lrt->id,
+                'code' => $lrt->code,
+                'destination' => $lrt->destination,
+                'type' => 'LRT ' . $lrt->type,
+                'departure' => date_format(Carbon::parse($lrt->departure), 'H:i'),
+                'station' => LrtRoute::where('train_id', $lrt->id)
+                                ->join('lrt_stations', 'lrt_stations.id', '=', 'lrt_routes.station_id')
+                                ->get()->map(function($st) use($dept) {
+                                    return [
+                                        'name' => $st->name,
+                                        'time' => date_format($dept->addMinutes($st->travel_time), 'H:i')
+                                    ];
+                                })
+            ];
+            })
+        ]);
+
     }
 }

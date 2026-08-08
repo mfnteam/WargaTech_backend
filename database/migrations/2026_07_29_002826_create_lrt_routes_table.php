@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('train_id')->references('id')->on('lrt_trains')->cascadeOnDelete();
             $table->unsignedBigInteger('station_id');
             $table->foreign('station_id')->references('id')->on('lrt_stations')->cascadeOnDelete();
+            $table->integer('order');
+            $table->integer('travel_time');
             $table->timestamps();
         });
     }

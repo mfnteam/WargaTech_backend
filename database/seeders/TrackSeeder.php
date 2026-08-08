@@ -88,7 +88,7 @@ class TrackSeeder extends Seeder
                 'track_name' => 'dukuhatas-harjamukti
                 ',
                 'station_passed' => '12,13,14,15,16,17,18,19,26,27,28',
-                'travel_time' => '0,3,3,3,3,5,3,3,3,3,3'
+                'travel_time' => '0,3,3,3,3,5,3,3,3,3,3,3'
             ]
         ];
 
